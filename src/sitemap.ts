@@ -1,4 +1,4 @@
-import type { RO_Sitemap } from './lib/types.ts';
+import type { RO_Sitemap } from '$lib';
 
 export const sitemap = (<const>{
    "/": true,
