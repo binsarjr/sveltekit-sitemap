@@ -1,6 +1,9 @@
 {
 	"name": "@binsarjr/sveltekit-sitemap",
-	"version": "0.0.21",
+	"version": "0.0.22",
+	"repository": {
+		"url": "https://github.com/binsarjr/sveltekit-sitemap"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run package",
