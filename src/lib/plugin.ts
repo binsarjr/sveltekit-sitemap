@@ -8,18 +8,31 @@ export const sitemapPlugin = ({
   sitemapFile = "./src/sitemap.ts"
 }: SitemapPluginParams = {}) => {
   function updateSitemap() {
-    fs.writeFileSync(
-      sitemapFile,
-      `import type { RO_Sitemap } from './lib/types.ts';
+    if (/\.ts$/i.test(sitemapFile)) {
+      fs.writeFileSync(
+        sitemapFile,
+        `import type { RO_Sitemap } from '@binsarjr/sveltekit-sitemap';
 
 export const sitemap = (<const>${JSON.stringify(getRoutes(routesDir), null, 3).replace(
-        /\uFFFF/g,
-        '\\"'
-      )}) satisfies RO_Sitemap
+          /\uFFFF/g,
+          '\\"'
+        )}) satisfies RO_Sitemap
 
 export type Sitemap = typeof sitemap
 `
-    )
+      )
+    } else {
+      fs.writeFileSync(
+        sitemapFile,
+        `
+/** @type {import('@binsarjr/sveltekit-sitemap').RO_Sitemap} */
+export const sitemap = ${JSON.stringify(getRoutes(routesDir), null, 3).replace(
+          /\uFFFF/g,
+          '\\"'
+        )}
+`
+      )
+    }
   }
   updateSitemap()
 
