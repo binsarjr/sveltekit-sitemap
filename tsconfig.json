@@ -9,7 +9,6 @@
 				"./src/lib/*"
 			]
 		},
-		
 		"allowJs": true,
 		"checkJs": true,
 		"esModuleInterop": true,
@@ -18,5 +17,7 @@
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"strict": true,
+		"noEmit": true,
+		"allowImportingTsExtensions": true
 	}
 }

@@ -1,7 +1,7 @@
 import fs from "fs"
 import type { ViteDevServer } from "vite"
-import type { SitemapPluginParams } from "./types"
-import { getRoutes } from "./utils"
+import type { SitemapPluginParams } from "./types.ts"
+import { getRoutes } from "./utils.ts"
 
 export const sitemapPlugin = ({
   routesDir = "./src/routes",

@@ -1,5 +1,5 @@
-export * from './hook'
-export * from './plugin'
-export * from './types'
-export * from './utils'
+export * from './hook.ts'
+export * from './plugin.ts'
+export * from './types.ts'
+export * from './utils.ts'
 

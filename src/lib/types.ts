@@ -1,29 +1,36 @@
 import type { RequestEvent } from "@sveltejs/kit"
 import type { ReadonlyDeep, SetOptional } from "type-fest"
-export type RO_Sitemap = ReadonlyDeep<Sitemap>;
-export type Sitemap = Record<string, boolean>;
-export type Str<P> = P extends string ? P : never;
-export type Routes<S extends RO_Sitemap> = Str<keyof S>;
+export type RO_Sitemap = ReadonlyDeep<Sitemap>
+export type Sitemap = Record<string, boolean>
+export type Str<P> = P extends string ? P : never
+export type Routes<S extends RO_Sitemap> = Str<keyof S>
 export type DynamicRoutes<S extends RO_Sitemap, R extends Routes<S> = Routes<S>> = R extends `/${infer B}/[${infer P}]`
   ? `/${B}/[${P}]`
-  : never;
+  : never
 export type Folders<S extends RO_Sitemap> = Str<
   {
-    [K in keyof S]: S[K] extends true ? (K extends string ? (K extends "/" ? "/" : `${K}/`) : never) : never;
+    [K in keyof S]: S[K] extends true ? (K extends string ? (K extends "/" ? "/" : `${K}/`) : never) : never
   }[keyof S]
->;
+>
 
+
+/**
+ * Check if route does not have [] format then is static route
+ * 
+ * @example true = /blog
+ * @example false = /blog/[id]
+ */
 export type StaticRoutes<S extends RO_Sitemap, R extends Routes<S> = Routes<S>> = Str<
   R extends `${infer Prefix}[${infer _}]${infer Suffix}` ? never : R
->;
+>
 
-type Priority = "1.0" | "0.9" | "0.8" | "0.7" | "0.6" | "0.5" | "0.4" | "0.3" | "0.2" | "0.1" | "0.0";
+export type Priority = "1.0" | "0.9" | "0.8" | "0.7" | "0.6" | "0.5" | "0.4" | "0.3" | "0.2" | "0.1" | "0.0"
 
-type Frequency = "Always" | "Hourly" | "Weekly" | "Monthly" | "Yearly" | "Never";
+export type Frequency = "Always" | "Hourly" | "Weekly" | "Monthly" | "Yearly" | "Never"
 export type RouteDefinition<S extends boolean> = SetOptional<
   {
-    path: string;
-    lastMod?: string;
+    path: string
+    lastMod?: string
     /**
      * 1. Always
      * These page types are constantly changing and will include index pages on major news publications, Google News, stock market data, and social bookmarking categories.
@@ -40,7 +47,7 @@ export type RouteDefinition<S extends boolean> = SetOptional<
      * 7. Never
      * As the name suggests, these pages never ever get updates. These are really old blog posts, press releases, notifications about updates that never need updating, and completely static pages.
      */
-    changeFreq?: Frequency;
+    changeFreq?: Frequency
     /**
      * 1.0-0.8
      * Homepage, product information, landing pages.
@@ -49,53 +56,53 @@ export type RouteDefinition<S extends boolean> = SetOptional<
      * 0.3-0.0
      * FAQs, outdated info, old press releases, completely static pages that are still relevant enough to keep from deleting entirely.
      */
-    priority?: Priority;
-    image?: RouteDefinitionImage;
+    priority?: Priority
+    image?: RouteDefinitionImage
   },
   S extends true ? "path" : never
->;
+>
 export type RouteDefinitionImage = {
-  url: string;
-  title?: string | null;
-  altText?: string | null;
-};
-export type Event = RequestEvent<Partial<Record<string, string>>, string | null>;
+  url: string
+  title?: string | null
+  altText?: string | null
+}
+export type Event = RequestEvent<Partial<Record<string, string>>, string | null>
 export type PathDirectives<S extends Sitemap> = {
-  [K in Routes<S> | Folders<S> | "/$"]?: K extends DynamicRoutes<S> ? { [K in string]?: boolean } : boolean;
-};
+  [K in Routes<S> | Folders<S> | "/$"]?: K extends DynamicRoutes<S> ? { [K in string]?: boolean } : boolean
+}
 
 export type UserAgentDirective<S extends Sitemap> = {
-  userAgent?: string | string[];
+  userAgent?: string | string[]
   /**
    * How many seconds a crawler should wait before loading and crawling page content. Note that Googlebot does not acknowledge this command, but crawl rate can be set in Google Search Console.
    */
-  crawlDelay?: number;
-  paths: PathDirectives<S>;
-};
+  crawlDelay?: number
+  paths: PathDirectives<S>
+}
 export type RouteDefinitions<S extends RO_Sitemap> = {
   [K in Routes<S>]?: K extends StaticRoutes<S> ? RouteDefinition<true> : RouteDefinition<false>[];
   // [K in Routes<S>]?: boolean | RouteDefinition<true> | RouteDefinition<false>[]
-};
+}
 
 export type SitemapParams<S extends RO_Sitemap> = {
-  getRobots?: (event: Event) => Promise<boolean | UserAgentDirective<S> | UserAgentDirective<S>[]>;
-  getRoutes?: (event: Event) => Promise<RouteDefinitions<S>>;
-};
+  getRobots?: (event: Event) => Promise<boolean | UserAgentDirective<S> | UserAgentDirective<S>[]>
+  getRoutes?: (event: Event) => Promise<RouteDefinitions<S>>
+}
 
 export type SitemapPluginParams = {
-  routesDir?: string;
-  sitemapFile?: string;
-};
+  routesDir?: string
+  sitemapFile?: string
+}
 
 export type ReplaceParams<
   S extends string,
   Delimiter extends string = "/"
 > = S extends `${infer Head}${Delimiter}${infer Tail}`
   ? Head extends `[${infer P}]`
-    ? `${string}/${ReplaceParams<Tail, Delimiter>}`
-    : `${Head}/${ReplaceParams<Tail, Delimiter>}`
+  ? `${string}/${ReplaceParams<Tail, Delimiter>}`
+  : `${Head}/${ReplaceParams<Tail, Delimiter>}`
   : S extends Delimiter
   ? ""
   : S extends `[${infer P}]`
   ? string
-  : `${S}`;
+  : `${S}`

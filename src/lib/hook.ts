@@ -1,6 +1,6 @@
 import type { Handle } from "@sveltejs/kit"
-import type { RO_Sitemap, SitemapParams } from "./types"
-import { generateRobots, generateSitemap } from "./utils"
+import type { RO_Sitemap, SitemapParams } from "./types.ts"
+import { generateRobots, generateSitemap } from "./utils.ts"
 
 export const sitemapHook =
   <S extends RO_Sitemap>(sitemap: S, params: SitemapParams<S> | undefined = {}): Handle =>

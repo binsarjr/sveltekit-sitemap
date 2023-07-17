@@ -1,5 +1,5 @@
 import fs from "fs"
-import type { RO_Sitemap, RouteDefinition, RouteDefinitions, Sitemap, UserAgentDirective } from "./types"
+import type { RO_Sitemap, RouteDefinition, RouteDefinitions, Sitemap, UserAgentDirective } from "./types.ts"
 
 export const encodeXML = (str: string) => {
   return str
