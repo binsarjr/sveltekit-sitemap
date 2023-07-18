@@ -19,7 +19,11 @@ export default defineConfig({
 			return {
 				name: 'replace-dependencies-in-sitemap.ts',
 				configureServer(server) {
-					server.watcher.add([sitemapRoute]).on('add', update).on('change', update);
+					server.watcher
+						.add([sitemapRoute])
+						.on('add', update)
+						.on('ready', update)
+						.on('change', update);
 				}
 			};
 		})()

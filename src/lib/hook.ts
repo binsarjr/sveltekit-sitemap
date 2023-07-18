@@ -25,7 +25,7 @@ export const sitemapHook =
 				headers: {
 					'content-type': 'text/plain',
 					// Cache it for 24 hours
-					'cache-control': `max-age=${60 * 60 * 24}`
+					'cache-control': params.devMode ? `no-cache` : `max-age=${60 * 60 * 24}`
 				}
 			});
 		}

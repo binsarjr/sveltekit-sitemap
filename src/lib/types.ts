@@ -107,6 +107,7 @@ export type RouteDefinitions<S extends RO_Sitemap> = {
 export type SitemapParams<S extends RO_Sitemap> = {
 	getRobots?: (event: Event) => Promise<boolean | UserAgentDirective<S> | UserAgentDirective<S>[]>;
 	getRoutes?: (event: Event) => Promise<RouteDefinitions<S>>;
+	devMode?: boolean;
 };
 
 export type SitemapPluginParams = {

@@ -5,5 +5,4 @@
 <ul>
 	<li><a href="/robots.txt" data-sveltekit-reload>Robots.txt</a></li>
 	<li><a href="/sitemap.xml" data-sveltekit-reload>sitemap.xml</a></li>
-	<li>Soon for rss and other</li>
 </ul>
