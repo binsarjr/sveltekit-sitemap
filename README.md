@@ -1,6 +1,6 @@
 # @binsarjr/sveltekit-sitemap (and robots)
 
-Recode from https://github.com/beynar/sveltekit-sitemap 
+Recode from https://github.com/beynar/sveltekit-sitemap
 
 This library is designed to help generate and maintain dynamic sitemap.xml and robots.txt for SvelteKit apps.
 
@@ -27,12 +27,12 @@ yarn add @binsarjr/sveltekit-sitemap
 ```ts
 // vite.config.js
 
-import { sveltekit } from "@sveltejs/kit/vite";
-import { sitemapPlugin } from "@binsarjr/sveltekit-sitemap";
+import { sveltekit } from '@sveltejs/kit/vite';
+import { sitemapPlugin } from '@binsarjr/sveltekit-sitemap';
 
 /** @type {import('vite').UserConfig} */
 const config = {
-  plugins: [sveltekit(), sitemapPlugin()]
+	plugins: [sveltekit(), sitemapPlugin()]
 };
 
 export default config;
@@ -42,9 +42,9 @@ export default config;
 
 ```ts
 // src/hooks.server.ts
-import type { Handle } from "@sveltejs/kit";
-import { sitemapHook } from "@binsarjr/sveltekit-sitemap";
-import { sitemap } from "./sitemap";
+import type { Handle } from '@sveltejs/kit';
+import { sitemapHook } from '@binsarjr/sveltekit-sitemap';
+import { sitemap } from './sitemap';
 
 export const handle: Handle = sitemapHook(sitemap, params);
 ```
@@ -60,7 +60,7 @@ You can pass an object to configure where the plugin should look up for your rou
 | sitemapFile | string | "./src/sitemap.ts" |
 
 ```ts
-sitemapPlugin({ routesDir: "./src/routes", sitemapFile: "./src/sitemap.ts" });
+sitemapPlugin({ routesDir: './src/routes', sitemapFile: './src/sitemap.ts' });
 ```
 
 ## sitemapHook
@@ -98,36 +98,36 @@ RouteDefinitionImage
 
 ```ts
 sitemapHook(sitemap, {
-  //...
-  getRoutes: async (event) => {
-    const blogs = await event.locals.api.getBlogsForSitemap();
-    // ^-- make async api call to get fresh data
+	//...
+	getRoutes: async (event) => {
+		const blogs = await event.locals.api.getBlogsForSitemap();
+		// ^-- make async api call to get fresh data
 
-    return {
-      "/about": {
-        path: "/",
-        priority: "0.8"
-      },
-      // ^-- Static routes are automatically added to the sitemap. But if you want to customize them, you can return a route definition object.
-      "blogs/[handle]": blogs,
-      "/products/[id]": [
-        { path: "/products/test-1" },
-        { path: "/products/test-2" },
-        {
-          path: "/products/test-3",
-          changeFreq: "Monthly",
-          priority: "0.8",
-          lastMod: "2023-01-01",
-          image: {
-            url: "https://picsum.photos/200/300",
-            title: "test-1",
-            altText: "image-product-test-1"
-          }
-        }
-      ]
-      // ^-- For dynamic routes you have to return an array of route definitions
-    };
-  }
+		return {
+			'/about': {
+				path: '/',
+				priority: '0.8'
+			},
+			// ^-- Static routes are automatically added to the sitemap. But if you want to customize them, you can return a route definition object.
+			'blogs/[handle]': blogs,
+			'/products/[id]': [
+				{ path: '/products/test-1' },
+				{ path: '/products/test-2' },
+				{
+					path: '/products/test-3',
+					changeFreq: 'Monthly',
+					priority: '0.8',
+					lastMod: '2023-01-01',
+					image: {
+						url: 'https://picsum.photos/200/300',
+						title: 'test-1',
+						altText: 'image-product-test-1'
+					}
+				}
+			]
+			// ^-- For dynamic routes you have to return an array of route definitions
+		};
+	}
 });
 ```
 
@@ -157,12 +157,12 @@ The boolean tells if the route is allowed (true) or disallowed (false). Note tha
 
 ```ts
 const directive: PathDirectives = {
-  "/admin/": false, // the "/" after disables all routes under /admin
-  "/blogs/": false, // all the "blogs" directory is disallow
-  "/login": false, // disallow the login page
-  "/blogs/[id]": {
-    "/blogs/id": true // But the route blog/id is allowed
-  }
+	'/admin/': false, // the "/" after disables all routes under /admin
+	'/blogs/': false, // all the "blogs" directory is disallow
+	'/login': false, // disallow the login page
+	'/blogs/[id]': {
+		'/blogs/id': true // But the route blog/id is allowed
+	}
 };
 ```
 
@@ -171,52 +171,52 @@ Examples
 ```ts
 // With a boolean -  If preview mode the entire app will be disallowed.
 sitemapHook(sitemap, {
-  //...
-  getRobots: async (event) => {
-    const { isPreview } = event.locals;
-    return isPreview ? false : true;
-  }
+	//...
+	getRobots: async (event) => {
+		const { isPreview } = event.locals;
+		return isPreview ? false : true;
+	}
 });
 
 // With a single config for multiple agents
 sitemapHook(sitemap, {
-  //...
-  getRobots: async (event) => {
-    return {
-      userAgent: ["*", "adsbot-google"],
-      crawlDelay: 1000,
-      paths: {
-        "/account/": false,
-        "/pages/[id]": {
-          "/pages/preview": false
-        }
-      }
-    };
-  }
+	//...
+	getRobots: async (event) => {
+		return {
+			userAgent: ['*', 'adsbot-google'],
+			crawlDelay: 1000,
+			paths: {
+				'/account/': false,
+				'/pages/[id]': {
+					'/pages/preview': false
+				}
+			}
+		};
+	}
 });
 
 // With a multiple configs for multiple agents
 sitemapHook(sitemap, {
-  //...
-  getRobots: async (event) => {
-    return [
-      {
-        userAgent: ["*", "adsbot-google"],
-        crawlDelay: 1000,
-        paths: {
-          "/account/": false,
-          "/pages/[id]": {
-            "/pages/preview": false
-          }
-        }
-      },
-      {
-        userAgent: "Googlebot-Image",
-        paths: {
-          "/": false
-        }
-      }
-    ];
-  }
+	//...
+	getRobots: async (event) => {
+		return [
+			{
+				userAgent: ['*', 'adsbot-google'],
+				crawlDelay: 1000,
+				paths: {
+					'/account/': false,
+					'/pages/[id]': {
+						'/pages/preview': false
+					}
+				}
+			},
+			{
+				userAgent: 'Googlebot-Image',
+				paths: {
+					'/': false
+				}
+			}
+		];
+	}
 });
 ```
