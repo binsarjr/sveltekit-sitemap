@@ -1,5 +1,6 @@
 import fs from 'fs';
-import type { ViteDevServer } from 'vite';
+import type { Plugin } from 'vite';
+
 import type { SitemapPluginParams } from './types.ts';
 import { getRoutes } from './utils.ts';
 
@@ -33,14 +34,16 @@ export const sitemap = ${JSON.stringify(getRoutes(routesDir), null, 3).replace(/
 	}
 	updateSitemap();
 
-	return {
+	const config: Plugin = {
 		name: 'sveltekit-sitemap',
-		configureServer(server: ViteDevServer) {
+
+		configureServer(server) {
 			server.watcher
-				.add([routesDir])
+				.on('ready', updateSitemap)
 				.on('add', updateSitemap)
 				.on('unlink', updateSitemap)
 				.on('unlinkDir', updateSitemap);
 		}
 	};
+	return config;
 };
