@@ -220,3 +220,6 @@ sitemapHook(sitemap, {
 	}
 });
 ```
+
+# Contributing
+need better documentation
